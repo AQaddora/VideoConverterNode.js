@@ -45,8 +45,6 @@ app.use((req, res, next) => {
 
 // Handle file upload request
 app.post('/upload', upload.single('video'), (req, res) => {
-    res.json({ convertedFile: "Download Desktop Version" });
-    return
     const inputFile = req.file.path;
     const outputFileName = `${Date.now()}_${req.file.originalname}`;
     const outputFile = path.join(__dirname, 'public', 'converted', outputFileName);
@@ -107,8 +105,6 @@ app.post('/upload', upload.single('video'), (req, res) => {
 });
 // Serve the converted video for download
 app.get('/download/:filename', (req, res) => {
-    res.json({ convertedFile: "Download Desktop Version" });
-    return;
     const filename = req.params.filename;
     const filePath = path.join(__dirname, 'public', 'converted', filename);
 
