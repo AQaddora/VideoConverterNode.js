@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+const port = 1996;
 
 // Set up Multer for file upload
 const storage = multer.diskStorage({
