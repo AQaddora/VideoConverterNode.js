@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = 1996;
@@ -75,6 +76,25 @@ app.post('/upload', upload.single('video'), (req, res) => {
         if (code === 0) {
             console.log('File conversion successful');
             res.json({ convertedFile: convertedFilePath });
+
+            // Delete the uploaded file
+            fs.unlink(inputFile, (unlinkErr) => {
+                if (unlinkErr) {
+                    console.error('Error deleting file:', unlinkErr);
+                } else {
+                    console.log('File deleted:', inputFile);
+                }
+            });
+            // Schedule deletion of converted file after 30 minutes
+            setTimeout(() => {
+                fs.unlink(outputFile, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error('Error deleting converted file:', unlinkErr);
+                    } else {
+                        console.log('Converted file deleted:', outputFile);
+                    }
+                });
+            }, 30 * 60 * 1000);
         } else {
             console.error('File conversion failed');
             res.status(500).send('File conversion failed');
@@ -85,15 +105,14 @@ app.post('/upload', upload.single('video'), (req, res) => {
 app.get('/download/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(__dirname, 'public', 'converted', filename);
-  
-    res.download(filePath, (err) => {
-      if (err) {
-        console.error('Error sending file:', err);
-        res.status(500).send('Error sending file');
-      }
-    });
-  });
 
+    res.download(filePath, (err) => {
+        if (err) {
+            console.error('Error sending file:', err);
+            res.status(500).send('Error sending file');
+        }
+    });
+});
 // Start the server
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
