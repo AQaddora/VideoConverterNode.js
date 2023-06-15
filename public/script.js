@@ -17,9 +17,9 @@ const form = document.getElementById('uploadForm');
         const { videoWidth, videoHeight } = video;
         widthInput.value = videoWidth;
         heightInput.value = videoHeight;
-        widthInput.disabled = false;
-        heightInput.disabled = false;
-        maintainAspectRatioCheckbox.disabled = false;
+        widthInput.disabled = true;
+        heightInput.disabled = true;
+        maintainAspectRatioCheckbox.disabled = true;
       };
       video.src = URL.createObjectURL(file);
     }
@@ -60,8 +60,8 @@ const form = document.getElementById('uploadForm');
 
           // Enable/disable width and height inputs based on maintainAspectRatio checkbox
           maintainAspectRatioCheckbox.addEventListener('change', () => {
-            widthInput.disabled = maintainAspectRatioCheckbox.checked;
-            heightInput.disabled = maintainAspectRatioCheckbox.checked;
+            widthInput.disabled = true;
+            heightInput.disabled = true;
 
             if (maintainAspectRatioCheckbox.checked) {
               // Calculate and update new dimensions
